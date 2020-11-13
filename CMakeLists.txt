@@ -15,6 +15,6 @@ add_subdirectory(lib/glad)
 add_subdirectory(lib/glfw)
 
 include_directories(lib/glad/include)
-add_executable(falling_sand src/Main.c src/Config.h src/Game.h src/Game.c src/VertexArray.h src/VertexArray.c src/Buffer.h src/Buffer.c)
+add_executable(falling_sand src/Main.c src/Config.h src/Game.h src/Game.c src/VertexArray.h src/VertexArray.c src/Buffer.h src/Buffer.c src/Debug.h src/Debug.c)
 
 target_link_libraries(falling_sand glad GL GLU glfw dl X11 Xxf86vm Xrandr pthread Xi Xinerama Xcursor)

@@ -5,6 +5,7 @@
 #include "Config.h"
 #include "Game.h"
 #include "VertexArray.h"
+#include "Debug.h"
 
 uint32_t vertexArrayId;
 uint32_t vertexBufferId;
@@ -21,18 +22,6 @@ uint32_t squareIndices[6] = {
         0, 1, 2,
         2, 3, 0
 };
-
-void GLAPIENTRY GLErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message,
-                                const void* userParam) {
-    fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-            (type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
-            type, severity, message);
-}
-
-void InitDebug() {
-    glEnable(GL_DEBUG_OUTPUT);
-    glDebugMessageCallback(GLErrorCallback, NULL);
-}
 
 void InitBuffers() {
     InitVertexArray(&vertexArrayId);
