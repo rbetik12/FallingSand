@@ -60,12 +60,14 @@ void InitShaders() {
                                       "uniform sampler2D u_Texture;"
                                       ""
                                       "void main() {"
-                                      " vec4 texColor = vec4(1.0, 0.0, 0.0, 0.0);"
+                                      " vec4 texColor = texture(u_Texture, v_TexCoord);"
                                       " color = texColor;"
                                       "}";
 
     InitShader(&basicShaderId, basicVertexShader, basicFragmentShader);
     BindShader(&basicShaderId);
+    SetUniform1i(&basicShaderId, "u_Texture", 0);
+    UnBindShader(&basicShaderId);
 }
 
 void InitGame() {
@@ -117,6 +119,7 @@ int main(int argc, char** argv) {
     updateInfo->vertexBufferId = vertexBufferId;
     updateInfo->indexBufferId = indexBufferId;
     updateInfo->basicShaderId = basicShaderId;
+    updateInfo->gamefield = gamefield;
 
     while (!glfwWindowShouldClose(window)) {
         OnUpdate(updateInfo);

@@ -9,6 +9,7 @@ void OnUpdate(struct GLContext const* info) {
     glClearColor(0, 0, 0, 1);
 
     BindShader(&info->basicShaderId);
+    OnUpdateGamefield(info->gamefield);
     BindVertexArray(&info->vertexArrayId);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);

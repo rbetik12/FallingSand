@@ -128,3 +128,15 @@ void UnBindShader(uint32_t * shaderId) {
     glUseProgram(0);
 }
 
+int GetUniformLocation(uint32_t * shaderId, const char* name) {
+    int location = glGetUniformLocation(*shaderId, name);
+    if (location == -1) {
+        fprintf(stderr, "Warning: uniform %s doesn't exist!\n", name);
+    }
+    return location;
+}
+
+void SetUniform1i(uint32_t * shaderId, const char* name, int value) {
+    glUniform1i(GetUniformLocation(shaderId, name), value);
+}
+
