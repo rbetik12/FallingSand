@@ -8,11 +8,13 @@
 #include "opengl/Buffer.h"
 #include "utils/Debug.h"
 #include "opengl/Shader.h"
+#include "game/Gamefield.h"
 
 uint32_t vertexArrayId;
 uint32_t vertexBufferId;
 uint32_t indexBufferId;
 uint32_t basicShaderId;
+Gamefield *gamefield;
 
 float verticesSquare[4 * 4] = {
         -1.f, -1.f, 0.0f, 0.0f,
@@ -66,6 +68,12 @@ void InitShaders() {
     BindShader(&basicShaderId);
 }
 
+void InitGame() {
+    gamefield = malloc(sizeof(Gamefield));
+    InitGamefield(gamefield);
+    BindGamefield(0, gamefield);
+}
+
 int main(int argc, char** argv) {
     GLFWwindow* window;
 
@@ -101,6 +109,7 @@ int main(int argc, char** argv) {
     InitBuffers();
     InitShaders();
     InitDebug();
+    InitGame();
 
     struct GLContext* updateInfo = malloc(sizeof(struct GLContext));
     updateInfo->window = window;
