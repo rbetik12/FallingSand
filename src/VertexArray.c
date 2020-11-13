@@ -22,7 +22,7 @@ void AddVertexBuffer(const uint32_t * vertexArrayId, const uint32_t * vertexBuff
                           2, //2 floats per vertex coordinates
                           GL_FLOAT,
                           GL_FALSE, // we don't need to normalize coordinates of rect, because they're already within [-1; 1] range
-                          sizeof(float) * 2, // total stride is 8 bytes (assuming that float is 4 bytes). 2 floats per vertex coords
+                          sizeof(float) * 4, // total stride is 16 bytes (assuming that float is 4 bytes). 4 floats in a row (2 vertex coords and 2 tex coords)
                           0 // offset is 0, because vertex coordinates are first in a row
                           );
 
@@ -31,7 +31,7 @@ void AddVertexBuffer(const uint32_t * vertexArrayId, const uint32_t * vertexBuff
                           2, //2 floats per texture coordinates
                           GL_FLOAT,
                           GL_FALSE, // we don't need to normalize coordinates of rect, because they're already within [-1; 1] range
-                          sizeof(float) * 2, // total stride is 8 bytes (assuming that float is 4 bytes). 2 floats per tex coords
+                          sizeof(float) * 4, // the same as in previous call
                           (const void*) (sizeof(float) * 2) // offset is 8 bytes, because texture coordinates go after 2 floats of vertex coords
                           );
 }
