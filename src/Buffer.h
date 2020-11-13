@@ -12,8 +12,8 @@ void UnBindVertexBuffer(uint32_t * vertexBufferId);
 
 // Index Buffer declaration ////////////////////////////////////////////////////////////////////////////////////
 
-void InitIndexBuffer(uint32_t * vertexBufferId, uint32_t* indices, uint32_t count);
+void InitIndexBuffer(uint32_t * indexBufferId, uint32_t* indices, uint32_t count);
 
-void BindIndexBuffer(const uint32_t * vertexBufferId);
+void BindIndexBuffer(const uint32_t * indexBufferId);
 
-void UnBindIndexBuffer(uint32_t * vertexBufferId);
+void UnBindIndexBuffer(uint32_t * indexBufferId);

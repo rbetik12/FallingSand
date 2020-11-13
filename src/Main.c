@@ -5,6 +5,7 @@
 #include "Config.h"
 #include "Game.h"
 #include "VertexArray.h"
+#include "Buffer.h"
 #include "Debug.h"
 
 uint32_t vertexArrayId;
@@ -24,7 +25,12 @@ uint32_t squareIndices[6] = {
 };
 
 void InitBuffers() {
+    InitVertexBuffer(&vertexBufferId, verticesSquare, sizeof(verticesSquare));
+    InitIndexBuffer(&indexBufferId, squareIndices, sizeof(squareIndices));
+
     InitVertexArray(&vertexArrayId);
+    AddVertexBuffer(&vertexArrayId, &vertexBufferId);
+    AddIndexBuffer(&vertexArrayId, &indexBufferId);
 }
 
 int main(int argc, char** argv) {

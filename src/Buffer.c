@@ -19,16 +19,16 @@ void UnBindVertexBuffer(uint32_t * vertexBufferId) {
 
 // Index Buffer definition ////////////////////////////////////////////////////////////////////////////////////
 
-void InitIndexBuffer(uint32_t * vertexBufferId, uint32_t* indices, uint32_t count) {
-    glCreateBuffers(1, vertexBufferId);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *vertexBufferId);
+void InitIndexBuffer(uint32_t * indexBufferId, uint32_t* indices, uint32_t count) {
+    glCreateBuffers(1, indexBufferId);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *indexBufferId);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
 }
 
-void BindIndexBuffer(const uint32_t * vertexBufferId) {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *vertexBufferId);
+void BindIndexBuffer(const uint32_t * indexBufferId) {
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *indexBufferId);
 }
 
-void UnBindIndexBuffer(uint32_t * vertexBufferId) {
+void UnBindIndexBuffer(uint32_t * indexBufferId) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
