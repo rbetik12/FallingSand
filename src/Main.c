@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "Config.h"
-#include "Game.h"
-#include "VertexArray.h"
-#include "Buffer.h"
-#include "Debug.h"
-#include "Shader.h"
+#include "utils/Config.h"
+#include "game/Game.h"
+#include "opengl/VertexArray.h"
+#include "opengl/Buffer.h"
+#include "utils/Debug.h"
+#include "opengl/Shader.h"
 
 uint32_t vertexArrayId;
 uint32_t vertexBufferId;

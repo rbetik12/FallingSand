@@ -1,8 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Game.h"
-#include "Shader.h"
-#include "VertexArray.h"
+#include "../opengl/Shader.h"
+#include "../opengl/VertexArray.h"
 
 void OnUpdate(struct GLContext const* info) {
     glClear(GL_COLOR_BUFFER_BIT);
