@@ -1,6 +1,7 @@
 #include "Gamefield.h"
 #include <stdlib.h>
 #include <glad/glad.h>
+#include <stdio.h>
 
 uint8_t * GetRawColor32Array(Gamefield *gamefield);
 
@@ -34,9 +35,9 @@ void OnUpdateGamefield(Gamefield* gamefield) {
     for (size_t i = 0; i < gamefield->height * gamefield->width; i++) {
         Pixel pixel;
         pixel.color.a = 1;
-        pixel.color.r = (rand() / RAND_MAX) * 255;
-        pixel.color.g = (rand() / RAND_MAX) * 255;
-        pixel.color.b = (rand() / RAND_MAX) * 255;
+        pixel.color.r = ((float)rand() / RAND_MAX) * 255;
+        pixel.color.g = ((float)rand() / RAND_MAX) * 255;
+        pixel.color.b = ((float)rand() / RAND_MAX) * 255;
         gamefield->pixels[i] = pixel;
     }
 
