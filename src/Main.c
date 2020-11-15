@@ -9,12 +9,14 @@
 #include "utils/Debug.h"
 #include "opengl/Shader.h"
 #include "game/Gamefield.h"
+#include "utils/Input.h"
 
 uint32_t vertexArrayId;
 uint32_t vertexBufferId;
 uint32_t indexBufferId;
 uint32_t basicShaderId;
 Gamefield *gamefield;
+GLFWwindow* window;
 
 float verticesSquare[4 * 4] = {
         -1.f, -1.f, 0.0f, 0.0f,
@@ -27,6 +29,11 @@ uint32_t squareIndices[6] = {
         0, 1, 2,
         2, 3, 0
 };
+
+void InitEventHandlers() {
+    glfwSetCursorPosCallback(window, OnMouseMove);
+    glfwSetMouseButtonCallback(window, OnMouseClick);
+}
 
 void InitBuffers() {
     InitVertexBuffer(&vertexBufferId, verticesSquare, sizeof(verticesSquare));
@@ -78,8 +85,6 @@ void InitGame() {
 }
 
 int main(int argc, char** argv) {
-    GLFWwindow* window;
-
     if (!glfwInit())
         return -1;
 
@@ -113,6 +118,7 @@ int main(int argc, char** argv) {
     InitShaders();
     InitDebug();
     InitGame();
+    InitEventHandlers();
 
     struct GLContext* updateInfo = malloc(sizeof(struct GLContext));
     updateInfo->window = window;

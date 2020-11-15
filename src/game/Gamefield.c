@@ -3,10 +3,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <glad/glad.h>
+#include "../utils/Input.h"
 
 #define GAMEFIELD_SIZE WIDTH * HEIGHT
 
-uint8_t * GetRawColor32Array(Gamefield *gamefield);
+uint8_t* GetRawColor32Array(Gamefield* gamefield);
 
 void InitGamefield(Gamefield* gamefield) {
     gamefield->width = WIDTH;
@@ -35,16 +36,16 @@ void BindGamefield(uint32_t slot, Gamefield* gamefield) {
 }
 
 void OnUpdateGamefield(Gamefield* gamefield) {
-    for (size_t i = 0; i < GAMEFIELD_SIZE; i++) {
-        Pixel pixel;
-        pixel.color.a = 255;
-        pixel.color.r = ((float)rand() / RAND_MAX) * 255;
-        pixel.color.g = ((float)rand() / RAND_MAX) * 255;
-        pixel.color.b = ((float)rand() / RAND_MAX) * 255;
-        gamefield->pixels[i] = pixel;
-    }
+    uint32_t x = 640;
+    uint32_t y = 360;
+    Pixel pixel;
+    pixel.color.a = 255;
+    pixel.color.r = 194;
+    pixel.color.g = 178;
+    pixel.color.b = 128;
+    gamefield->pixels[y * gamefield->width + x] = pixel;
 
-    uint8_t * rawPixelArray = NULL;
+    uint8_t* rawPixelArray = NULL;
     if (rawPixelArray == NULL) {
         rawPixelArray = GetRawColor32Array(gamefield);
     }
@@ -52,8 +53,12 @@ void OnUpdateGamefield(Gamefield* gamefield) {
     free(rawPixelArray);
 }
 
-uint8_t * GetRawColor32Array(Gamefield *gamefield) {
-    uint8_t * pixelArray = malloc(gamefield->width * gamefield->height * 4);
+void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
+    printf("Clicked at X: %f Y: %f\n", pos.x, pos.y);
+}
+
+uint8_t* GetRawColor32Array(Gamefield* gamefield) {
+    uint8_t* pixelArray = malloc(gamefield->width * gamefield->height * 4);
     size_t pixelArrayIndex = 0;
     for (int i = 0; i < GAMEFIELD_SIZE; i++) {
         pixelArray[pixelArrayIndex++] = gamefield->pixels[i].color.r;
