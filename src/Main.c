@@ -30,9 +30,9 @@ uint32_t squareIndices[6] = {
 
 void InitBuffers() {
     InitVertexBuffer(&vertexBufferId, verticesSquare, sizeof(verticesSquare));
-    InitIndexBuffer(&indexBufferId, squareIndices, sizeof(squareIndices));
-
+    InitIndexBuffer(&indexBufferId, squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
     InitVertexArray(&vertexArrayId);
+
     AddVertexBuffer(&vertexArrayId, &vertexBufferId);
     AddIndexBuffer(&vertexArrayId, &indexBufferId);
 }
@@ -42,7 +42,7 @@ void InitShaders() {
                                     "#version 330 core"
                                     "\n"
                                     "layout(location = 0) in vec3 position;"
-                                    "layout(location = 0) in vec2 texCoord;"
+                                    "layout(location = 1) in vec2 texCoord;"
                                     ""
                                     "out vec2 v_TexCoord;"
                                     ""
@@ -61,6 +61,7 @@ void InitShaders() {
                                       ""
                                       "void main() {"
                                       " vec4 texColor = texture(u_Texture, v_TexCoord);"
+                                      " "
                                       " color = texColor;"
                                       "}";
 

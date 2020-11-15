@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <stdio.h>
 #include "Buffer.h"
 
 void InitVertexArray(uint32_t * id) {
@@ -34,6 +35,7 @@ void AddVertexBuffer(const uint32_t * vertexArrayId, const uint32_t * vertexBuff
                           sizeof(float) * 4, // the same as in previous call
                           (const void*) (sizeof(float) * 2) // offset is 8 bytes, because texture coordinates go after 2 floats of vertex coords
                           );
+    UnBindVertexArray(vertexArrayId);
 }
 
 void AddIndexBuffer(const uint32_t * vertexArrayId, const uint32_t * indexBufferId) {
