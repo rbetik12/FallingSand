@@ -36,15 +36,6 @@ void BindGamefield(uint32_t slot, Gamefield* gamefield) {
 }
 
 void OnUpdateGamefield(Gamefield* gamefield) {
-    uint32_t x = 640;
-    uint32_t y = 360;
-    Pixel pixel;
-    pixel.color.a = 255;
-    pixel.color.r = 194;
-    pixel.color.g = 178;
-    pixel.color.b = 128;
-    gamefield->pixels[y * gamefield->width + x] = pixel;
-
     uint8_t* rawPixelArray = NULL;
     if (rawPixelArray == NULL) {
         rawPixelArray = GetRawColor32Array(gamefield);
@@ -54,7 +45,14 @@ void OnUpdateGamefield(Gamefield* gamefield) {
 }
 
 void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
-    printf("Clicked at X: %f Y: %f\n", pos.x, pos.y);
+    Pixel pixel;
+    pixel.pixelType = Sand;
+    pixel.color.a = 255;
+    pixel.color.r = 194;
+    pixel.color.g = 178;
+    pixel.color.b = 128;
+    pos.y = gamefield->height - pos.y;
+    gamefield->pixels[(uint32_t) pos.y * gamefield->width + (uint32_t) pos.x] = pixel;
 }
 
 uint8_t* GetRawColor32Array(Gamefield* gamefield) {

@@ -8,7 +8,7 @@ void OnMouseMove(GLFWwindow* window, double xPos, double yPos) {
 }
 
 void OnMouseClick(GLFWwindow* window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_1) {
+    if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
         MousePos pos;
         struct GLContext * context;
         glfwGetCursorPos(window, &pos.x, &pos.y);
