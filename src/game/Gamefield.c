@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <glad/glad.h>
 #include "../utils/Input.h"
+#include "Simulation.h"
 
 #define GAMEFIELD_SIZE WIDTH * HEIGHT
 
@@ -22,6 +23,16 @@ void InitGamefield(Gamefield* gamefield) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
+    for (size_t i = 0; i < gamefield->height * gamefield->width; i++) {
+        Pixel pixel;
+        pixel.pixelType = Empty;
+        pixel.color.a = 255;
+        pixel.color.r = 0;
+        pixel.color.g = 0;
+        pixel.color.b = 0;
+        gamefield->pixels[i] = pixel;
+    }
+
     OnUpdateGamefield(gamefield);
     UnBindGamefield(gamefield);
 }
@@ -36,6 +47,16 @@ void BindGamefield(uint32_t slot, Gamefield* gamefield) {
 }
 
 void OnUpdateGamefield(Gamefield* gamefield) {
+    for (size_t y = 0; y < gamefield->height; y++) {
+        for (size_t x = 0; x < gamefield->width; x++) {
+            UIntVec2 coords;
+            coords.x = x;
+            coords.y = y;
+            Step(gamefield, gamefield->pixels[y * gamefield->height + x], &coords);
+        }
+    }
+
+
     uint8_t* rawPixelArray = NULL;
     if (rawPixelArray == NULL) {
         rawPixelArray = GetRawColor32Array(gamefield);
