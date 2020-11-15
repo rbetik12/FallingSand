@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "Pixel.h"
 #include "../utils/Config.h"
+#include "../utils/Input.h"
 
 typedef struct Gamefield Gamefield;
 
@@ -20,3 +21,5 @@ void BindGamefield(uint32_t slot, Gamefield* gamefield);
 void UnBindGamefield(Gamefield* gamefield);
 
 void OnUpdateGamefield(Gamefield* gamefield);
+
+void OnGamefieldClick(Gamefield* gamefield, MousePos pos);

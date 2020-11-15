@@ -31,7 +31,7 @@ uint32_t squareIndices[6] = {
 };
 
 void InitEventHandlers() {
-    glfwSetCursorPosCallback(window, OnMouseMove);
+//    glfwSetCursorPosCallback(window, OnMouseMove);
     glfwSetMouseButtonCallback(window, OnMouseClick);
 }
 
@@ -127,6 +127,8 @@ int main(int argc, char** argv) {
     updateInfo->indexBufferId = indexBufferId;
     updateInfo->basicShaderId = basicShaderId;
     updateInfo->gamefield = gamefield;
+
+    glfwSetWindowUserPointer(window, updateInfo);
 
     while (!glfwWindowShouldClose(window)) {
         OnUpdate(updateInfo);
