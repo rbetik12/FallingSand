@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <glad/glad.h>
+#include <assert.h>
 #include "../utils/Input.h"
 #include "Simulation.h"
 
@@ -52,10 +53,11 @@ void OnUpdateGamefield(Gamefield* gamefield) {
             UIntVec2 coords;
             coords.x = x;
             coords.y = y;
-            Step(gamefield, gamefield->pixels[y * gamefield->height + x], &coords);
+            if (gamefield->pixels[y * gamefield->width + x].pixelType == Sand) {
+                SandStep(gamefield, coords);
+            }
         }
     }
-
 
     uint8_t* rawPixelArray = NULL;
     if (rawPixelArray == NULL) {

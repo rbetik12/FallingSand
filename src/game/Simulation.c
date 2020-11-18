@@ -1,29 +1,53 @@
 #include <stdio.h>
 #include "Simulation.h"
 
-void SandStep(Gamefield* gamefield, struct Pixel pixel, UIntVec2* coords);
 void GetSand(struct Pixel *pixel);
 void GetEmpty(struct Pixel *pixel);
+void SwapSandPixel(Gamefield * gamefield, UIntVec2 * old, UIntVec2 * new);
 
-void Step(Gamefield* gamefield, struct Pixel pixel, UIntVec2* coords) {
-    if (pixel.pixelType == Empty) return;
-    if (pixel.pixelType == Sand)  {
-        SandStep(gamefield, pixel, coords);
+void SandStep(Gamefield* gamefield, UIntVec2 coords) {
+    if (coords.y == 0) return;
+    if (coords.y < 0) {
+        struct UIntVec2 new;
+        new.x = coords.x;
+        new.y = 0;
+        SwapSandPixel(gamefield, &coords, &new);
+        return;
+    }
+    if (gamefield->pixels[(coords.y - 1) * gamefield->width + coords.x].pixelType != Empty &&
+            gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x - 1)].pixelType != Empty &&
+            gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x + 1)].pixelType != Empty) return;
+    struct UIntVec2 new;
+    if (gamefield->pixels[(coords.y - 1) * gamefield->width + coords.x].pixelType == Empty) {
+        new.x = coords.x;
+        new.y = coords.y;
+        new.y -= 1;
+        SwapSandPixel(gamefield, &coords, &new);
+    }
+    else if (gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x - 1)].pixelType == Empty) {
+        new.x = coords.x;
+        new.y = coords.y;
+        new.y -= 1;
+        new.x -= 1;
+        SwapSandPixel(gamefield, &coords, &new);
+    }
+    else if (gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x + 1)].pixelType == Empty) {
+        new.x = coords.x;
+        new.y = coords.y;
+        new.y -= 1;
+        new.x += 1;
+        SwapSandPixel(gamefield, &coords, &new);
     }
 }
 
-void SandStep(Gamefield* gamefield, struct Pixel pixel, UIntVec2* coords) {
-    if (coords->y <= 0 || coords->y - 1 <= 0) return;
-    if (gamefield->pixels[(coords->y - 1) * gamefield->height + coords->x].pixelType != Empty) return;
-    if (gamefield->pixels[(coords->y - 1) * gamefield->height + coords->x].pixelType == Empty) {
-        Pixel emptyPixel;
-        GetEmpty(&emptyPixel);
-        gamefield->pixels[coords->y * gamefield->height + coords->x] = emptyPixel;
-        coords->y -= 1;
-        Pixel sandPixel;
-        GetSand(&sandPixel);
-        gamefield->pixels[(coords->y - 1) * gamefield->height + coords->x] = sandPixel;
-    }
+void SwapSandPixel(Gamefield * gamefield, UIntVec2 * old, UIntVec2 * new) {
+    struct Pixel sandPixel;
+    GetSand(&sandPixel);
+    struct Pixel emptyPixel;
+    GetEmpty(&emptyPixel);
+
+    gamefield->pixels[old->y * gamefield->width + old->x] = emptyPixel;
+    gamefield->pixels[new->y * gamefield->width + new->x] = sandPixel;
 }
 
 void GetSand(struct Pixel *pixel) {

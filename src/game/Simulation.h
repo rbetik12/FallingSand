@@ -9,4 +9,4 @@ struct UIntVec2 {
     uint32_t y;
 };
 
-void Step(Gamefield* gamefield, struct Pixel pixel, UIntVec2* coords);
+void SandStep(Gamefield *gamefield, UIntVec2 coords);
