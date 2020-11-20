@@ -5,6 +5,10 @@
 void SwapSandPixel(Gamefield * gamefield, IntVec2 * old, IntVec2 * new);
 void SwapWaterPixel(Gamefield * gamefield, IntVec2 * old, IntVec2 * new);
 
+bool WithinBounds(Gamefield * gamefield, int x, int y) {
+    return !(x < 0 || y < 0 || x >= gamefield->width || y >= gamefield->height);
+}
+
 void SandStep(Gamefield* gamefield, IntVec2 coords) {
     if (coords.y == 0) return;
     if (coords.y < 0) {
@@ -14,24 +18,22 @@ void SandStep(Gamefield* gamefield, IntVec2 coords) {
         SwapSandPixel(gamefield, &coords, &new);
         return;
     }
-    if (gamefield->pixels[(coords.y - 1) * gamefield->width + coords.x].pixelType != Empty &&
-            gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x - 1)].pixelType != Empty &&
-            gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x + 1)].pixelType != Empty) return;
+
     struct IntVec2 new;
-    if (gamefield->pixels[(coords.y - 1) * gamefield->width + coords.x].pixelType == Empty) {
+    if (WithinBounds(gamefield, coords.x, coords.y - 1) && gamefield->pixels[(coords.y - 1) * gamefield->width + coords.x].pixelType == Empty) {
         new.x = coords.x;
         new.y = coords.y;
         new.y -= 1;
         SwapSandPixel(gamefield, &coords, &new);
     }
-    else if (gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x - 1)].pixelType == Empty) {
+    else if (WithinBounds(gamefield, coords.x - 1, coords.y - 1) && gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x - 1)].pixelType == Empty) {
         new.x = coords.x;
         new.y = coords.y;
         new.y -= 1;
         new.x -= 1;
         SwapSandPixel(gamefield, &coords, &new);
     }
-    else if (gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x + 1)].pixelType == Empty) {
+    else if (WithinBounds(gamefield, coords.x + 1, coords.y - 1) && gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x + 1)].pixelType == Empty) {
         new.x = coords.x;
         new.y = coords.y;
         new.y -= 1;
