@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <glad/glad.h>
 #include <assert.h>
+#include <stdbool.h>
 #include "../utils/Input.h"
 #include "Simulation.h"
 
@@ -50,6 +51,12 @@ void BindGamefield(uint32_t slot, Gamefield* gamefield) {
 void OnUpdateGamefield(Gamefield* gamefield) {
     for (size_t y = 0; y < gamefield->height; y++) {
         for (size_t x = 0; x < gamefield->width; x++) {
+            gamefield->pixels[y * gamefield->width + x].isUpdated = false;
+        }
+    }
+    for (size_t y = 0; y < gamefield->height; y++) {
+        for (size_t x = 0; x < gamefield->width; x++) {
+            if (gamefield->pixels[y * gamefield->width + x].isUpdated) continue;
             IntVec2 coords;
             coords.x = x;
             coords.y = y;
@@ -70,9 +77,11 @@ void OnUpdateGamefield(Gamefield* gamefield) {
     free(rawPixelArray);
 }
 
-void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
+
+void CreatePixel(Gamefield *gamefield, IntVec2 coords, PixelType type) {
+    if (coords.x < 0 || coords.x >= gamefield->width || coords.y < 0 || coords.y >= gamefield->height) return;
     Pixel pixel;
-    switch (GetCurrentPixelType()) {
+    switch (type) {
         case Water:
             GetWater(&pixel);
             break;
@@ -83,8 +92,14 @@ void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
             GetEmpty(&pixel);
             break;
     }
-    pos.y = gamefield->height - pos.y;
-    gamefield->pixels[(uint32_t) pos.y * gamefield->width + (uint32_t) pos.x] = pixel;
+    gamefield->pixels[(uint32_t) coords.y * gamefield->width + (uint32_t) coords.x] = pixel;
+}
+
+void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
+    IntVec2 coords;
+    coords.x = pos.x;
+    coords.y = gamefield->height - pos.y;
+    CreatePixel(gamefield, coords, GetCurrentPixelType());
 }
 
 uint8_t* GetRawColor32Array(Gamefield* gamefield) {
