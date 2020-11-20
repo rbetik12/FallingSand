@@ -4,6 +4,7 @@
 #include "../game/Game.h"
 
 static PixelType currentPixelType = Sand;
+static bool isMouseButton1Pressed = false;
 
 void OnMouseMove(GLFWwindow* window, double xPos, double yPos) {
     printf("Moved mouse X: %f Y: %f\n", xPos, yPos);
@@ -11,11 +12,10 @@ void OnMouseMove(GLFWwindow* window, double xPos, double yPos) {
 
 void OnMouseButtonEvent(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
-        MousePos pos;
-        struct GLContext * context;
-        glfwGetCursorPos(window, &pos.x, &pos.y);
-        context = glfwGetWindowUserPointer(window);
-        OnGamefieldClick(context->gamefield, pos);
+        isMouseButton1Pressed = true;
+    }
+    else if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
+        isMouseButton1Pressed = false;
     }
 }
 
@@ -38,6 +38,13 @@ void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
         printf("S is pressed!\n");
         currentPixelType = Sand;
     }
+}
+
+bool IsMousePressed(int buttonCode) {
+    if (buttonCode == GLFW_MOUSE_BUTTON_1) {
+        return isMouseButton1Pressed;
+    }
+    return false;
 }
 
 PixelType GetCurrentPixelType() {
