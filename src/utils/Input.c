@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include <glfw/include/GLFW/glfw3.h>
 #include "Input.h"
-#include "../game/Game.h"
+#include <stdio.h>
+#include <GLFW/glfw3.h>
 
 static PixelType currentPixelType = Sand;
 static bool isMouseButton1Pressed = false;
@@ -19,23 +18,11 @@ void OnMouseButtonEvent(GLFWwindow* window, int button, int action, int mods) {
     }
 }
 
-void OnKeyPress(GLFWwindow * window, uint32_t keycode) {
-    if (keycode == GLFW_KEY_W) {
-
-    }
-    else if (keycode == GLFW_KEY_S) {
-        printf("S is pressed!\n");
-        currentPixelType = Sand;
-    }
-}
-
 void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-        printf("W is pressed!\n");
         currentPixelType = Water;
     }
     else if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-        printf("S is pressed!\n");
         currentPixelType = Sand;
     }
 }

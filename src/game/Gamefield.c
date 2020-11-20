@@ -1,11 +1,9 @@
 #include "Gamefield.h"
-#include "../utils/ImageLoader.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <glad/glad.h>
-#include <assert.h>
 #include <stdbool.h>
-#include "../utils/Input.h"
+#include <glad/glad.h>
+#include "../utils/ImageLoader.h"
 #include "Simulation.h"
 
 #define GAMEFIELD_SIZE WIDTH * HEIGHT
@@ -79,7 +77,7 @@ void OnUpdateGamefield(Gamefield* gamefield) {
 
 
 void CreatePixel(Gamefield *gamefield, IntVec2 coords, PixelType type) {
-    if (coords.x < 0 || coords.x >= gamefield->width || coords.y < 0 || coords.y >= gamefield->height) return;
+    if (!WithinBounds(gamefield, coords.x, coords.y)) return;
     Pixel pixel;
     switch (type) {
         case Water:
@@ -96,9 +94,43 @@ void CreatePixel(Gamefield *gamefield, IntVec2 coords, PixelType type) {
 }
 
 void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
+    pos.y = gamefield->height - pos.y;
     IntVec2 coords;
     coords.x = pos.x;
-    coords.y = gamefield->height - pos.y;
+    coords.y = pos.y;
+
+    CreatePixel(gamefield, coords, GetCurrentPixelType());
+
+    coords.x = pos.x - 1;
+    coords.y = pos.y - 1;
+    CreatePixel(gamefield, coords, GetCurrentPixelType());
+
+    coords.x = pos.x;
+    coords.y = pos.y - 1;
+    CreatePixel(gamefield, coords, GetCurrentPixelType());
+
+    coords.x = pos.x + 1;
+    coords.y = pos.y - 1;
+    CreatePixel(gamefield, coords, GetCurrentPixelType());
+
+    coords.x = pos.x - 1;
+    coords.y = pos.y;
+    CreatePixel(gamefield, coords, GetCurrentPixelType());
+
+    coords.x = pos.x + 1;
+    coords.y = pos.y;
+    CreatePixel(gamefield, coords, GetCurrentPixelType());
+
+    coords.x = pos.x - 1;
+    coords.y = pos.y + 1;
+    CreatePixel(gamefield, coords, GetCurrentPixelType());
+
+    coords.x = pos.x;
+    coords.y = pos.y + 1;
+    CreatePixel(gamefield, coords, GetCurrentPixelType());
+
+    coords.x = pos.x + 1;
+    coords.y = pos.y + 1;
     CreatePixel(gamefield, coords, GetCurrentPixelType());
 }
 
