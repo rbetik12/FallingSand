@@ -2,14 +2,15 @@
 
 #include "Gamefield.h"
 
-typedef struct UIntVec2 UIntVec2;
+typedef struct IntVec2 IntVec2;
 
-struct UIntVec2 {
-    uint32_t x;
-    uint32_t y;
+struct IntVec2 {
+    int x;
+    int y;
 };
 
-void SandStep(Gamefield *gamefield, UIntVec2 coords);
+void SandStep(Gamefield *gamefield, IntVec2 coords);
+void WaterStep(Gamefield *gamefield, IntVec2 coords);
 
 void GetSand(struct Pixel *pixel);
 void GetEmpty(struct Pixel *pixel);

@@ -50,11 +50,14 @@ void BindGamefield(uint32_t slot, Gamefield* gamefield) {
 void OnUpdateGamefield(Gamefield* gamefield) {
     for (size_t y = 0; y < gamefield->height; y++) {
         for (size_t x = 0; x < gamefield->width; x++) {
-            UIntVec2 coords;
+            IntVec2 coords;
             coords.x = x;
             coords.y = y;
             if (gamefield->pixels[y * gamefield->width + x].pixelType == Sand) {
                 SandStep(gamefield, coords);
+            }
+            else if (gamefield->pixels[y * gamefield->width + x].pixelType == Water) {
+                WaterStep(gamefield, coords);
             }
         }
     }
