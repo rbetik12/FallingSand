@@ -31,8 +31,8 @@ uint32_t squareIndices[6] = {
 };
 
 void InitEventHandlers() {
-//    glfwSetCursorPosCallback(window, OnMouseMove);
-    glfwSetMouseButtonCallback(window, OnMouseClick);
+    glfwSetMouseButtonCallback(window, OnMouseButtonEvent);
+    glfwSetKeyCallback(window, OnKeyEvent);
 }
 
 void InitBuffers() {

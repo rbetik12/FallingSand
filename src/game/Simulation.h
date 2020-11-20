@@ -10,3 +10,7 @@ struct UIntVec2 {
 };
 
 void SandStep(Gamefield *gamefield, UIntVec2 coords);
+
+void GetSand(struct Pixel *pixel);
+void GetEmpty(struct Pixel *pixel);
+void GetWater(struct Pixel *pixel);

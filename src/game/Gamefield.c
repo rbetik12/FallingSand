@@ -69,11 +69,17 @@ void OnUpdateGamefield(Gamefield* gamefield) {
 
 void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
     Pixel pixel;
-    pixel.pixelType = Sand;
-    pixel.color.a = 255;
-    pixel.color.r = 194;
-    pixel.color.g = 178;
-    pixel.color.b = 128;
+    switch (GetCurrentPixelType()) {
+        case Water:
+            GetWater(&pixel);
+            break;
+        case Sand:
+            GetSand(&pixel);
+            break;
+        case Empty:
+            GetEmpty(&pixel);
+            break;
+    }
     pos.y = gamefield->height - pos.y;
     gamefield->pixels[(uint32_t) pos.y * gamefield->width + (uint32_t) pos.x] = pixel;
 }

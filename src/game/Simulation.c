@@ -66,3 +66,11 @@ void GetEmpty(struct Pixel *pixel) {
     pixel->color.b = 0;
 }
 
+void GetWater(struct Pixel *pixel) {
+    pixel->pixelType = Water;
+    pixel->color.a = 255;
+    pixel->color.r = 35;
+    pixel->color.g = 137;
+    pixel->color.b = 218;
+}
+

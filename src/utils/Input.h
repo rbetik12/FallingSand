@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../game/PixelType.h"
+
 typedef struct GLFWwindow GLFWwindow;
 struct GLFWwindow;
 
@@ -11,4 +13,6 @@ struct MousePos{
 };
 
 void OnMouseMove(GLFWwindow* window, double xPos, double yPos);
-void OnMouseClick(GLFWwindow* window, int button, int action, int mods);
+void OnMouseButtonEvent(GLFWwindow* window, int button, int action, int mods);
+void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods);
+PixelType GetCurrentPixelType();
