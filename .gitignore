@@ -1,8 +1,11 @@
-
 #Clion
 /.idea
+
+#Visual Studio
+/.vs
 
 #Build
 /cmake-build-debug
 /cmake-build-release
 /bin
+/out
