@@ -1,3 +1,6 @@
 [submodule "lib/glfw"]
 	path = lib/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "lib/vx-sound"]
+	path = lib/vx-sound
+	url = https://github.com/rbetik12/VortexSound.git

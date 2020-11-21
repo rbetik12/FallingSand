@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <vx-sound.h>
 #include "utils/Config.h"
 #include "game/Game.h"
 #include "opengl/VertexArray.h"
@@ -17,6 +18,8 @@ uint32_t indexBufferId;
 uint32_t basicShaderId;
 Gamefield *gamefield;
 GLFWwindow* window;
+
+static AudioSource ambientAudio;
 
 float verticesSquare[4 * 4] = {
         -1.f, -1.f, 0.0f, 0.0f,
@@ -84,6 +87,15 @@ void InitGame() {
     BindGamefield(0, gamefield);
 }
 
+void InitSound() {
+    VxSndInit();
+    VxSndLoadSound("ambient.mp3", &ambientAudio);
+    if (!ambientAudio.loaded) {
+        fprintf(stderr, "Can't load music!\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
 int main(int argc, char** argv) {
     if (!glfwInit())
         return -1;
@@ -119,6 +131,7 @@ int main(int argc, char** argv) {
     InitDebug();
     InitGame();
     InitEventHandlers();
+    InitSound();
 
     struct GLContext* updateInfo = malloc(sizeof(struct GLContext));
     updateInfo->window = window;
@@ -129,6 +142,8 @@ int main(int argc, char** argv) {
     updateInfo->gamefield = gamefield;
 
     glfwSetWindowUserPointer(window, updateInfo);
+
+    VxSndPlaySound(&ambientAudio);
 
     while (!glfwWindowShouldClose(window)) {
         OnUpdate(updateInfo);
