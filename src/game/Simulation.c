@@ -17,7 +17,7 @@ void SandStep(Gamefield* gamefield, IntVec2 coords) {
         new.y -= 1;
         SwapSandPixel(gamefield, &coords, &new);
     }
-    // check whether we can go either direction, that is done to simulate random behavior for particles
+        // check whether we can go either direction, that is done to simulate random behavior for particles
     else if (WithinBounds(gamefield, coords.x - 1, coords.y - 1) &&
              gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x - 1)].pixelType == Empty &&
              WithinBounds(gamefield, coords.x + 1, coords.y - 1) &&
@@ -27,14 +27,12 @@ void SandStep(Gamefield* gamefield, IntVec2 coords) {
         if (gamefield->simulationStep % 2 == 0) {
             new.y -= 1;
             new.x -= 1;
-        }
-        else {
+        } else {
             new.y -= 1;
             new.x += 1;
         }
         SwapSandPixel(gamefield, &coords, &new);
-    }
-    else if (WithinBounds(gamefield, coords.x - 1, coords.y - 1) &&
+    } else if (WithinBounds(gamefield, coords.x - 1, coords.y - 1) &&
                gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x - 1)].pixelType == Empty) {
         new.x = coords.x;
         new.y = coords.y;
@@ -58,17 +56,45 @@ void WaterStep(Gamefield* gamefield, IntVec2 coords) {
         new.y = coords.y;
         new.y -= 1;
         SwapWaterPixel(gamefield, &coords, &new);
-    } else if (WithinBounds(gamefield, coords.x - 1, coords.y - 1) && gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x - 1)].pixelType == Empty) {
+    } else if (WithinBounds(gamefield, coords.x - 1, coords.y - 1) &&
+               gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x - 1)].pixelType == Empty
+               && WithinBounds(gamefield, coords.x + 1, coords.y - 1) &&
+               gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x + 1)].pixelType == Empty) {
+        new.x = coords.x;
+        new.y = coords.y;
+        if (gamefield->simulationStep % 2 == 0) {
+            new.y -= 1;
+            new.x -= 1;
+        } else {
+            new.y -= 1;
+            new.x += 1;
+        }
+        SwapWaterPixel(gamefield, &coords, &new);
+    } else if (WithinBounds(gamefield, coords.x - 1, coords.y - 1) &&
+               gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x - 1)].pixelType == Empty) {
         new.x = coords.x;
         new.y = coords.y;
         new.y -= 1;
         new.x -= 1;
         SwapWaterPixel(gamefield, &coords, &new);
-    } else if (WithinBounds(gamefield, coords.x + 1, coords.y - 1) && gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x + 1)].pixelType == Empty) {
+    } else if (WithinBounds(gamefield, coords.x + 1, coords.y - 1) &&
+               gamefield->pixels[(coords.y - 1) * gamefield->width + (coords.x + 1)].pixelType == Empty) {
         new.x = coords.x;
         new.y = coords.y;
         new.y -= 1;
         new.x += 1;
+        SwapWaterPixel(gamefield, &coords, &new);
+    } else if (WithinBounds(gamefield, coords.x - 1, coords.y)
+               && gamefield->pixels[coords.y * gamefield->width + (coords.x - 1)].pixelType == Empty
+               && WithinBounds(gamefield, coords.x + 1, coords.y)
+               && gamefield->pixels[coords.y * gamefield->width + (coords.x + 1)].pixelType == Empty) {
+        new.x = coords.x;
+        new.y = coords.y;
+        if (gamefield->simulationStep % 2 == 0) {
+            new.x -= 1;
+        } else {
+            new.x += 1;
+        }
         SwapWaterPixel(gamefield, &coords, &new);
     } else if (WithinBounds(gamefield, coords.x - 1, coords.y)
                && gamefield->pixels[coords.y * gamefield->width + (coords.x - 1)].pixelType == Empty) {
