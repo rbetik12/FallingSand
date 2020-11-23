@@ -136,6 +136,19 @@ void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
     CreatePixel(gamefield, coords, GetCurrentPixelType());
 }
 
+void ClearGamefield(Gamefield *gamefield) {
+    for (size_t y = 0; y < gamefield->height; y++) {
+        for (size_t x = 0; x < gamefield->width; x++) {
+            gamefield->pixels[y * gamefield->width + x].isUpdated = false;
+            gamefield->pixels[y * gamefield->width + x].pixelType = Empty;
+            gamefield->pixels[y * gamefield->width + x].color.r = 0;
+            gamefield->pixels[y * gamefield->width + x].color.g = 0;
+            gamefield->pixels[y * gamefield->width + x].color.b = 0;
+            gamefield->pixels[y * gamefield->width + x].color.a = 255;
+        }
+    }
+}
+
 uint8_t* GetRawColor32Array(Gamefield* gamefield) {
     uint8_t* pixelArray = malloc(gamefield->width * gamefield->height * 4);
     size_t pixelArrayIndex = 0;

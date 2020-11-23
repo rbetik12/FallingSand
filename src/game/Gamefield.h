@@ -24,3 +24,5 @@ void UnBindGamefield(Gamefield* gamefield);
 void OnUpdateGamefield(Gamefield* gamefield);
 
 void OnGamefieldClick(Gamefield* gamefield, MousePos pos);
+
+void ClearGamefield(Gamefield *gamefield);

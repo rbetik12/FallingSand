@@ -1,4 +1,6 @@
 #include "Input.h"
+#include "../game/Gamefield.h"
+#include "../game/Game.h"
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 
@@ -24,6 +26,10 @@ void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
     }
     else if (key == GLFW_KEY_S && action == GLFW_PRESS) {
         currentPixelType = Sand;
+    }
+    else if (key == GLFW_KEY_C && action == GLFW_PRESS) {
+        struct GLContext* updateInfo = glfwGetWindowUserPointer(window);
+        ClearGamefield(updateInfo->gamefield);
     }
 }
 
