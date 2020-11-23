@@ -14,6 +14,7 @@ void InitGamefield(Gamefield* gamefield) {
     gamefield->width = WIDTH;
     gamefield->height = HEIGHT;
     gamefield->pixels = malloc(sizeof(Pixel) * gamefield->width * gamefield->height);
+    gamefield->simulationStep = 0;
 
     glGenTextures(1, &gamefield->rendererId);
     glBindTexture(GL_TEXTURE_2D, gamefield->rendererId);
@@ -47,6 +48,7 @@ void BindGamefield(uint32_t slot, Gamefield* gamefield) {
 }
 
 void OnUpdateGamefield(Gamefield* gamefield) {
+    gamefield->simulationStep += 1;
     for (size_t y = 0; y < gamefield->height; y++) {
         for (size_t x = 0; x < gamefield->width; x++) {
             gamefield->pixels[y * gamefield->width + x].isUpdated = false;

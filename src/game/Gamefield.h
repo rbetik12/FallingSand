@@ -12,6 +12,7 @@ struct Gamefield {
     uint32_t width, height;
 
     Pixel * pixels;
+    uint8_t simulationStep;
 };
 
 void InitGamefield(Gamefield* gamefield);

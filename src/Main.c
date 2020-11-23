@@ -126,12 +126,12 @@ int main(int argc, char** argv) {
     }
 
     // Initializes all buffers and debug functions
+    InitSound();
     InitBuffers();
     InitShaders();
     InitDebug();
     InitGame();
     InitEventHandlers();
-    InitSound();
 
     struct GLContext* updateInfo = malloc(sizeof(struct GLContext));
     updateInfo->window = window;
