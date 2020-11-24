@@ -51,12 +51,7 @@ void OnUpdateGamefield(Gamefield* gamefield) {
     gamefield->simulationStep += 1;
     for (size_t y = 0; y < gamefield->height; y++) {
         for (size_t x = 0; x < gamefield->width; x++) {
-            gamefield->pixels[y * gamefield->width + x].isUpdated = false;
-        }
-    }
-    for (size_t y = 0; y < gamefield->height; y++) {
-        for (size_t x = 0; x < gamefield->width; x++) {
-            if (gamefield->pixels[y * gamefield->width + x].isUpdated) continue;
+            if (gamefield->pixels[y * gamefield->width + x].lastUpdatedFrameNumber == gamefield->simulationStep) continue;
             IntVec2 coords;
             coords.x = x;
             coords.y = y;
@@ -142,7 +137,7 @@ void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
 void ClearGamefield(Gamefield *gamefield) {
     for (size_t y = 0; y < gamefield->height; y++) {
         for (size_t x = 0; x < gamefield->width; x++) {
-            gamefield->pixels[y * gamefield->width + x].isUpdated = false;
+            gamefield->pixels[y * gamefield->width + x].lastUpdatedFrameNumber = 0;
             gamefield->pixels[y * gamefield->width + x].pixelType = Empty;
             gamefield->pixels[y * gamefield->width + x].color.r = 0;
             gamefield->pixels[y * gamefield->width + x].color.g = 0;

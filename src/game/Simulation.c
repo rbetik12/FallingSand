@@ -117,8 +117,8 @@ void SwapSandPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new) {
     struct Pixel emptyPixel;
     GetEmpty(&emptyPixel);
 
-    sandPixel.isUpdated = true;
-    emptyPixel.isUpdated = true;
+    sandPixel.lastUpdatedFrameNumber = gamefield->simulationStep;
+    emptyPixel.lastUpdatedFrameNumber = gamefield->simulationStep;
 
     gamefield->pixels[old->y * gamefield->width + old->x] = emptyPixel;
     gamefield->pixels[new->y * gamefield->width + new->x] = sandPixel;
@@ -130,8 +130,8 @@ void SwapWaterPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new) {
     struct Pixel emptyPixel;
     GetEmpty(&emptyPixel);
 
-    waterPixel.isUpdated = true;
-    emptyPixel.isUpdated = true;
+    waterPixel.lastUpdatedFrameNumber = gamefield->simulationStep;
+    emptyPixel.lastUpdatedFrameNumber = gamefield->simulationStep;
 
     gamefield->pixels[old->y * gamefield->width + old->x] = emptyPixel;
     gamefield->pixels[new->y * gamefield->width + new->x] = waterPixel;

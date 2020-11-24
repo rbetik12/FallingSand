@@ -9,5 +9,5 @@ typedef struct Pixel Pixel;
 struct Pixel {
     Color32 color;
     PixelType pixelType;
-    bool isUpdated;
+    uint8_t lastUpdatedFrameNumber;
 };
