@@ -27,6 +27,9 @@ void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
     else if (key == GLFW_KEY_S && action == GLFW_PRESS) {
         currentPixelType = Sand;
     }
+    else if (key == GLFW_KEY_T && action == GLFW_PRESS) {
+        currentPixelType = Stone;
+    }
     else if (key == GLFW_KEY_C && action == GLFW_PRESS) {
         struct GLContext* updateInfo = glfwGetWindowUserPointer(window);
         ClearGamefield(updateInfo->gamefield);

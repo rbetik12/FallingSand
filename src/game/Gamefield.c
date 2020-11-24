@@ -88,6 +88,9 @@ void CreatePixel(Gamefield *gamefield, IntVec2 coords, PixelType type) {
         case Sand:
             GetSand(&pixel);
             break;
+        case Stone:
+            GetStone(&pixel);
+            break;
         case Empty:
             GetEmpty(&pixel);
             break;

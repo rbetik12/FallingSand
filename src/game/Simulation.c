@@ -153,6 +153,14 @@ void GetEmpty(struct Pixel* pixel) {
     pixel->color.b = 0;
 }
 
+void GetStone(Pixel * pixel) {
+    pixel->pixelType = Stone;
+    pixel->color.a = 255;
+    pixel->color.r = 115;
+    pixel->color.g = 115;
+    pixel->color.b = 115;
+}
+
 void GetWater(struct Pixel* pixel) {
     pixel->pixelType = Water;
     pixel->color.a = 255;

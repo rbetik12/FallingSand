@@ -5,5 +5,6 @@ typedef enum PixelType PixelType;
 enum PixelType {
     Sand,
     Water,
-    Empty
+    Empty,
+    Stone
 };
