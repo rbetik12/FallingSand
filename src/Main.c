@@ -89,7 +89,7 @@ void InitGame() {
 
 void InitSound() {
     VxSndInit();
-    VxSndLoadSound("ambient.mp3", &ambientAudio);
+    VxSndLoadSound("data/sound/ambient.mp3", &ambientAudio);
     if (!ambientAudio.loaded) {
         fprintf(stderr, "Can't load music!\n");
         exit(EXIT_FAILURE);
@@ -100,6 +100,7 @@ int main(int argc, char** argv) {
     if (!glfwInit())
         return -1;
 
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     window = glfwCreateWindow(WIDTH, HEIGHT, "Falling sand", NULL, NULL);
 
     if (!window) {

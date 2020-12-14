@@ -10,4 +10,5 @@ struct Pixel {
     Color32 color;
     PixelType pixelType;
     uint8_t lastUpdatedFrameNumber;
+    uint32_t density;
 };

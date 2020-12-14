@@ -5,12 +5,20 @@ void SwapSandPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new);
 
 void SwapWaterPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new);
 
+bool CheckDensity (Gamefield * gamefield, IntVec2* pixelCoords1, IntVec2* pixelCoords2);
+
 bool WithinBounds(Gamefield* gamefield, int x, int y) {
     return !(x < 0 || y < 0 || x >= gamefield->width || y >= gamefield->height);
 }
 
 void SandStep(Gamefield* gamefield, IntVec2 coords) {
     struct IntVec2 new;
+    new.x = coords.x;
+    new.y = coords.y + 1;
+    if (WithinBounds(gamefield, coords.x, coords.y + 1) && CheckDensity(gamefield, &coords, &new)) {
+        return;
+    }
+
     if (WithinBounds(gamefield, coords.x, coords.y - 1) && gamefield->pixels[(coords.y - 1) * gamefield->width + coords.x].pixelType == Empty) {
         new.x = coords.x;
         new.y = coords.y;
@@ -51,6 +59,13 @@ void SandStep(Gamefield* gamefield, IntVec2 coords) {
 
 void WaterStep(Gamefield* gamefield, IntVec2 coords) {
     struct IntVec2 new;
+    new.x = coords.x;
+    new.y = coords.y + 1;
+
+    if (WithinBounds(gamefield, coords.x, coords.y + 1) && CheckDensity(gamefield, &coords, &new)) {
+        return;
+    }
+
     if (WithinBounds(gamefield, coords.x, coords.y - 1) && gamefield->pixels[(coords.y - 1) * gamefield->width + coords.x].pixelType == Empty) {
         new.x = coords.x;
         new.y = coords.y;
@@ -137,12 +152,44 @@ void SwapWaterPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new) {
     gamefield->pixels[new->y * gamefield->width + new->x] = waterPixel;
 }
 
+void SwapPixels(Gamefield * gamefield, IntVec2* pixelCoords1, IntVec2* pixelCoords2) {
+    struct Pixel pixel1 = gamefield->pixels[pixelCoords1->y * gamefield->width + pixelCoords1->x];
+    struct Pixel pixel2 = gamefield->pixels[pixelCoords2->y * gamefield->width + pixelCoords2->x];
+
+    gamefield->pixels[pixelCoords1->y * gamefield->width + pixelCoords1->x] = pixel2;
+    gamefield->pixels[pixelCoords2->y * gamefield->width + pixelCoords2->x] = pixel1;
+}
+
+bool CheckForDensitySwappability(PixelType pixelType) {
+    switch (pixelType) {
+        case Stone:
+            return false;
+        case Empty:
+            return false;
+        default:
+            return true;
+    }
+}
+
+bool CheckDensity (Gamefield * gamefield, IntVec2* pixelCoords1, IntVec2* pixelCoords2) {
+    struct Pixel pixel1 = gamefield->pixels[pixelCoords1->y * gamefield->width + pixelCoords1->x];
+    struct Pixel pixel2 = gamefield->pixels[pixelCoords2->y * gamefield->width + pixelCoords2->x];
+
+    if (CheckForDensitySwappability(pixel2.pixelType) && pixel1.density < pixel2.density) {
+        SwapPixels(gamefield, pixelCoords1, pixelCoords2);
+        return true;
+    }
+
+    return false;
+}
+
 void GetSand(struct Pixel* pixel) {
     pixel->pixelType = Sand;
     pixel->color.a = 255;
     pixel->color.r = 194;
     pixel->color.g = 178;
     pixel->color.b = 128;
+    pixel->density = 1;
 }
 
 void GetEmpty(struct Pixel* pixel) {
@@ -151,6 +198,7 @@ void GetEmpty(struct Pixel* pixel) {
     pixel->color.r = 0;
     pixel->color.g = 0;
     pixel->color.b = 0;
+    pixel->density = UINT32_MAX;
 }
 
 void GetStone(Pixel * pixel) {
@@ -159,6 +207,7 @@ void GetStone(Pixel * pixel) {
     pixel->color.r = 115;
     pixel->color.g = 115;
     pixel->color.b = 115;
+    pixel->density = UINT32_MAX;
 }
 
 void GetWater(struct Pixel* pixel) {
@@ -167,5 +216,6 @@ void GetWater(struct Pixel* pixel) {
     pixel->color.r = 35;
     pixel->color.g = 137;
     pixel->color.b = 218;
+    pixel->density = 0;
 }
 
