@@ -34,6 +34,9 @@ void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
         struct GLContext* updateInfo = glfwGetWindowUserPointer(window);
         ClearGamefield(updateInfo->gamefield);
     }
+    else if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+        currentPixelType = Plant;
+    }
 }
 
 bool IsMousePressed(int buttonCode) {

@@ -1,4 +1,6 @@
 #include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "Simulation.h"
 
 void SwapSandPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new);
@@ -166,6 +168,8 @@ bool CheckForDensitySwappability(PixelType pixelType) {
             return false;
         case Empty:
             return false;
+        case Plant:
+            return false;
         default:
             return true;
     }
@@ -217,5 +221,19 @@ void GetWater(struct Pixel* pixel) {
     pixel->color.g = 137;
     pixel->color.b = 218;
     pixel->density = 0;
+}
+
+static int plantColors[] = {55, 117, 50, 65, 145, 49, 35, 82, 25, 62, 150, 44, 81, 201, 56};
+static int plantColorsIndexes[] = {0, 3, 6, 9, 12};
+
+void GetPlant(struct Pixel* pixel) {
+    uint8_t randomColorIndex = rand() % 5;
+    pixel->pixelType = Plant;
+    pixel->color.a = 255;
+    pixel->color.r = plantColors[plantColorsIndexes[randomColorIndex]];
+    pixel->color.g = plantColors[plantColorsIndexes[randomColorIndex] + 1];
+    pixel->color.b = plantColors[plantColorsIndexes[randomColorIndex] + 2];
+    printf("R: %d G: %d B: %d\n", pixel->color.r, pixel->color.g, pixel->color.b);
+    pixel->density = UINT32_MAX;
 }
 

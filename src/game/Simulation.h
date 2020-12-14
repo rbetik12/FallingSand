@@ -16,5 +16,6 @@ void GetSand(struct Pixel *pixel);
 void GetEmpty(struct Pixel *pixel);
 void GetWater(struct Pixel *pixel);
 void GetStone(struct Pixel *pixel);
+void GetPlant(struct Pixel* pixel);
 
 bool WithinBounds(Gamefield* gamefield, int x, int y);

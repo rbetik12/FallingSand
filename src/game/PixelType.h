@@ -6,5 +6,6 @@ enum PixelType {
     Sand,
     Water,
     Empty,
-    Stone
+    Stone,
+    Plant
 };

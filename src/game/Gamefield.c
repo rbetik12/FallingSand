@@ -89,6 +89,8 @@ void CreatePixel(Gamefield *gamefield, IntVec2 coords, PixelType type) {
         case Empty:
             GetEmpty(&pixel);
             break;
+        case Plant:
+            GetPlant(&pixel);
     }
     gamefield->pixels[(uint32_t) coords.y * gamefield->width + (uint32_t) coords.x] = pixel;
 }
