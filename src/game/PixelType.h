@@ -7,5 +7,6 @@ enum PixelType {
     Water,
     Empty,
     Stone,
-    Plant
+    Plant,
+    Smoke
 };

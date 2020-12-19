@@ -37,6 +37,9 @@ void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
     else if (key == GLFW_KEY_P && action == GLFW_PRESS) {
         currentPixelType = Plant;
     }
+    else if (key == GLFW_KEY_M && action == GLFW_PRESS) {
+        currentPixelType = Smoke;
+    }
 }
 
 bool IsMousePressed(int buttonCode) {

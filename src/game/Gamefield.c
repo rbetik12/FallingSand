@@ -61,6 +61,9 @@ void OnUpdateGamefield(Gamefield* gamefield) {
             else if (gamefield->pixels[y * gamefield->width + x].pixelType == Water) {
                 WaterStep(gamefield, coords);
             }
+            else if (gamefield->pixels[y * gamefield->width + x].pixelType == Smoke) {
+                SmokeStep(gamefield, coords);
+            }
         }
     }
 
@@ -91,6 +94,10 @@ void CreatePixel(Gamefield *gamefield, IntVec2 coords, PixelType type) {
             break;
         case Plant:
             GetPlant(&pixel);
+            break;
+        case Smoke:
+            GetSmoke(&pixel);
+            break;
     }
     gamefield->pixels[(uint32_t) coords.y * gamefield->width + (uint32_t) coords.x] = pixel;
 }
