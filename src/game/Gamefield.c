@@ -26,11 +26,7 @@ void InitGamefield(Gamefield* gamefield) {
 
     for (size_t i = 0; i < gamefield->height * gamefield->width; i++) {
         Pixel pixel;
-        pixel.pixelType = Empty;
-        pixel.color.a = 255;
-        pixel.color.r = 0;
-        pixel.color.g = 0;
-        pixel.color.b = 0;
+        GetEmpty(&pixel);
         gamefield->pixels[i] = pixel;
     }
 
@@ -63,6 +59,9 @@ void OnUpdateGamefield(Gamefield* gamefield) {
             }
             else if (gamefield->pixels[y * gamefield->width + x].pixelType == Smoke) {
                 SmokeStep(gamefield, coords);
+            }
+            else if (gamefield->pixels[y * gamefield->width + x].pixelType == Fire) {
+                FireStep(gamefield, coords);
             }
         }
     }
@@ -97,6 +96,9 @@ void CreatePixel(Gamefield *gamefield, IntVec2 coords, PixelType type) {
             break;
         case Smoke:
             GetSmoke(&pixel);
+            break;
+        case Fire:
+            GetFire(&pixel);
             break;
     }
     gamefield->pixels[(uint32_t) coords.y * gamefield->width + (uint32_t) coords.x] = pixel;

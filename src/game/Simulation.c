@@ -7,9 +7,15 @@ void SwapSandPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new);
 
 void SwapWaterPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new);
 
-bool CheckDensity (Gamefield * gamefield, IntVec2* pixelCoords1, IntVec2* pixelCoords2);
+bool CheckDensity(Gamefield* gamefield, IntVec2* pixelCoords1, IntVec2* pixelCoords2);
 
-void SwapSmokePixel(Gamefield * gamefield, IntVec2* old, IntVec2* new);
+void SwapSmokePixel(Gamefield* gamefield, IntVec2* old, IntVec2* new);
+
+bool IsFlameable(Gamefield* gamefield, int x, int y);
+
+void SwapFirePixel(Gamefield *gamefield, IntVec2* old, IntVec2* new);
+
+void SetRandomFirePixelColor(struct Pixel* pixel);
 
 bool WithinBounds(Gamefield* gamefield, int x, int y) {
     return !(x < 0 || y < 0 || x >= gamefield->width || y >= gamefield->height);
@@ -199,6 +205,80 @@ void SmokeStep(Gamefield* gamefield, IntVec2 coords) {
     }
 }
 
+void FireStep(Gamefield* gamefield, IntVec2 coords) {
+    SetRandomFirePixelColor(&gamefield->pixels[coords.y * gamefield->width + coords.x]);
+    if (gamefield->simulationStep % 10 != 0)  {
+        return;
+    }
+    struct IntVec2 new;
+    if (WithinBounds(gamefield, coords.x - 1, coords.y - 1) && IsFlameable(gamefield, coords.x - 1, coords.y - 1)) {
+        new.x = coords.x - 1;
+        new.y = coords.y - 1;
+        SwapFirePixel(gamefield, &coords, &new);
+    }
+    else if (WithinBounds(gamefield, coords.x, coords.y - 1) && IsFlameable(gamefield, coords.x, coords.y - 1)) {
+        new.x = coords.x;
+        new.y = coords.y - 1;
+        SwapFirePixel(gamefield, &coords, &new);
+    }
+    else if (WithinBounds(gamefield, coords.x + 1, coords.y - 1) && IsFlameable(gamefield, coords.x + 1, coords.y - 1)) {
+        new.x = coords.x + 1;
+        new.y = coords.y - 1;
+        SwapFirePixel(gamefield, &coords, &new);
+    }
+    else if (WithinBounds(gamefield, coords.x - 1, coords.y) && IsFlameable(gamefield, coords.x - 1, coords.y)) {
+        new.x = coords.x - 1;
+        new.y = coords.y;
+        SwapFirePixel(gamefield, &coords, &new);
+    }
+    else if (WithinBounds(gamefield, coords.x + 1, coords.y) && IsFlameable(gamefield, coords.x + 1, coords.y)) {
+        new.x = coords.x + 1;
+        new.y = coords.y;
+        SwapFirePixel(gamefield, &coords, &new);
+    }
+    else if (WithinBounds(gamefield, coords.x - 1, coords.y + 1) && IsFlameable(gamefield, coords.x - 1, coords.y + 1)) {
+        new.x = coords.x - 1;
+        new.y = coords.y + 1;
+        SwapFirePixel(gamefield, &coords, &new);
+    }
+    else if (WithinBounds(gamefield, coords.x, coords.y + 1) && IsFlameable(gamefield, coords.x, coords.y + 1)) {
+        new.x = coords.x;
+        new.y = coords.y + 1;
+        SwapFirePixel(gamefield, &coords, &new);
+    }
+    else if (WithinBounds(gamefield, coords.x + 1, coords.y + 1) && IsFlameable(gamefield, coords.x + 1, coords.y + 1)) {
+        new.x = coords.x + 1;
+        new.y = coords.y + 1;
+        SwapFirePixel(gamefield, &coords, &new);
+    }
+    else {
+        struct Pixel smoke;
+        GetSmoke(&smoke);
+        gamefield->pixels[coords.y * gamefield->width + coords.x] = smoke;
+    }
+}
+
+bool IsFlameable(Gamefield* gamefield, int x, int y) {
+    return gamefield->pixels[y * gamefield->width + x].flameable;
+}
+
+void SwapFirePixel(Gamefield *gamefield, IntVec2* old, IntVec2* new) {
+    if (gamefield->simulationStep % 5 != 0) return;
+    struct Pixel fire;
+    struct Pixel smoke;
+    struct Pixel empty;
+
+    GetEmpty(&empty);
+    GetFire(&fire);
+    GetSmoke(&smoke);
+
+    fire.lastUpdatedFrameNumber = gamefield->simulationStep;
+    smoke.lastUpdatedFrameNumber = gamefield->simulationStep;
+
+    gamefield->pixels[old->y * gamefield->width + old->x] = smoke;
+    gamefield->pixels[new->y * gamefield->width + new->x] = fire;
+}
+
 void SwapSandPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new) {
     struct Pixel sandPixel;
     GetSand(&sandPixel);
@@ -225,7 +305,7 @@ void SwapWaterPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new) {
     gamefield->pixels[new->y * gamefield->width + new->x] = waterPixel;
 }
 
-void SwapPixels(Gamefield * gamefield, IntVec2* pixelCoords1, IntVec2* pixelCoords2) {
+void SwapPixels(Gamefield* gamefield, IntVec2* pixelCoords1, IntVec2* pixelCoords2) {
     struct Pixel pixel1 = gamefield->pixels[pixelCoords1->y * gamefield->width + pixelCoords1->x];
     struct Pixel pixel2 = gamefield->pixels[pixelCoords2->y * gamefield->width + pixelCoords2->x];
 
@@ -233,7 +313,7 @@ void SwapPixels(Gamefield * gamefield, IntVec2* pixelCoords1, IntVec2* pixelCoor
     gamefield->pixels[pixelCoords2->y * gamefield->width + pixelCoords2->x] = pixel1;
 }
 
-void SwapSmokePixel(Gamefield * gamefield, IntVec2* old, IntVec2* new) {
+void SwapSmokePixel(Gamefield* gamefield, IntVec2* old, IntVec2* new) {
     struct Pixel smokePixel;
     struct Pixel emptyPixel;
 
@@ -248,8 +328,8 @@ void SwapSmokePixel(Gamefield * gamefield, IntVec2* old, IntVec2* new) {
     }
 
     if ((smokePixel.color.r == 0
-        && smokePixel.color.g == 0
-        && smokePixel.color.b == 0)
+         && smokePixel.color.g == 0
+         && smokePixel.color.b == 0)
         || new->y == gamefield->height) {
         GetEmpty(&smokePixel);
     }
@@ -274,7 +354,7 @@ bool CheckForDensitySwappability(PixelType pixelType) {
     }
 }
 
-bool CheckDensity (Gamefield * gamefield, IntVec2* pixelCoords1, IntVec2* pixelCoords2) {
+bool CheckDensity(Gamefield* gamefield, IntVec2* pixelCoords1, IntVec2* pixelCoords2) {
     struct Pixel pixel1 = gamefield->pixels[pixelCoords1->y * gamefield->width + pixelCoords1->x];
     struct Pixel pixel2 = gamefield->pixels[pixelCoords2->y * gamefield->width + pixelCoords2->x];
 
@@ -293,6 +373,7 @@ void GetSand(struct Pixel* pixel) {
     pixel->color.g = 178;
     pixel->color.b = 128;
     pixel->density = 20;
+    pixel->flameable = false;
 }
 
 void GetEmpty(struct Pixel* pixel) {
@@ -302,15 +383,17 @@ void GetEmpty(struct Pixel* pixel) {
     pixel->color.g = 0;
     pixel->color.b = 0;
     pixel->density = UINT32_MAX;
+    pixel->flameable = false;
 }
 
-void GetStone(Pixel * pixel) {
+void GetStone(Pixel* pixel) {
     pixel->pixelType = Stone;
     pixel->color.a = 255;
     pixel->color.r = 115;
     pixel->color.g = 115;
     pixel->color.b = 115;
     pixel->density = UINT32_MAX;
+    pixel->flameable = false;
 }
 
 void GetWater(struct Pixel* pixel) {
@@ -320,6 +403,7 @@ void GetWater(struct Pixel* pixel) {
     pixel->color.g = 137;
     pixel->color.b = 218;
     pixel->density = 10;
+    pixel->flameable = false;
 }
 
 static int plantColors[] = {55, 117, 50, 65, 145, 49, 35, 82, 25, 62, 150, 44, 81, 201, 56};
@@ -333,6 +417,7 @@ void GetPlant(struct Pixel* pixel) {
     pixel->color.g = plantColors[plantColorsIndexes[randomColorIndex] + 1];
     pixel->color.b = plantColors[plantColorsIndexes[randomColorIndex] + 2];
     pixel->density = UINT32_MAX;
+    pixel->flameable = true;
 }
 
 
@@ -347,5 +432,24 @@ void GetSmoke(struct Pixel* pixel) {
     pixel->color.g = smokeColors[smokeColorsIndexes[randomColorIndex] + 1];
     pixel->color.b = smokeColors[smokeColorsIndexes[randomColorIndex] + 2];
     pixel->density = 0;
+    pixel->flameable = false;
+}
+
+static int fireColors[] = {255, 132, 0, 199, 107, 8, 199, 145, 8, 255, 108, 3, 255, 66, 3};
+static int fireColorsIndexes[] = {0, 3, 6, 9, 12};
+
+void GetFire(struct Pixel* pixel) {
+    pixel->pixelType = Fire;
+    pixel->color.a = 255;
+    SetRandomFirePixelColor(pixel);
+    pixel->density = 0;
+    pixel->flameable = false;
+}
+
+void SetRandomFirePixelColor(struct Pixel* pixel) {
+    uint8_t randomColorIndex = rand() % 5;
+    pixel->color.r = fireColors[fireColorsIndexes[randomColorIndex]];
+    pixel->color.g = fireColors[fireColorsIndexes[randomColorIndex] + 1];
+    pixel->color.b = fireColors[fireColorsIndexes[randomColorIndex] + 2];
 }
 

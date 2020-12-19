@@ -8,5 +8,6 @@ enum PixelType {
     Empty,
     Stone,
     Plant,
-    Smoke
+    Smoke,
+    Fire
 };

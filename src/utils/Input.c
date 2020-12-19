@@ -40,6 +40,9 @@ void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
     else if (key == GLFW_KEY_M && action == GLFW_PRESS) {
         currentPixelType = Smoke;
     }
+    else if (key == GLFW_KEY_F && action == GLFW_PRESS) {
+        currentPixelType = Fire;
+    }
 }
 
 bool IsMousePressed(int buttonCode) {
