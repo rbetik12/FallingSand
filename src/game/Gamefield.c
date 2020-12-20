@@ -107,42 +107,17 @@ void CreatePixel(Gamefield *gamefield, IntVec2 coords, PixelType type) {
 void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
     pos.y = gamefield->height - pos.y;
     IntVec2 coords;
-    coords.x = pos.x;
-    coords.y = pos.y;
 
-    CreatePixel(gamefield, coords, GetCurrentPixelType());
+    uint8_t radius = GetCurrentPixelsRadius();
+    PixelType pixelType = GetCurrentPixelType();
 
-    coords.x = pos.x - 1;
-    coords.y = pos.y - 1;
-    CreatePixel(gamefield, coords, GetCurrentPixelType());
-
-    coords.x = pos.x;
-    coords.y = pos.y - 1;
-    CreatePixel(gamefield, coords, GetCurrentPixelType());
-
-    coords.x = pos.x + 1;
-    coords.y = pos.y - 1;
-    CreatePixel(gamefield, coords, GetCurrentPixelType());
-
-    coords.x = pos.x - 1;
-    coords.y = pos.y;
-    CreatePixel(gamefield, coords, GetCurrentPixelType());
-
-    coords.x = pos.x + 1;
-    coords.y = pos.y;
-    CreatePixel(gamefield, coords, GetCurrentPixelType());
-
-    coords.x = pos.x - 1;
-    coords.y = pos.y + 1;
-    CreatePixel(gamefield, coords, GetCurrentPixelType());
-
-    coords.x = pos.x;
-    coords.y = pos.y + 1;
-    CreatePixel(gamefield, coords, GetCurrentPixelType());
-
-    coords.x = pos.x + 1;
-    coords.y = pos.y + 1;
-    CreatePixel(gamefield, coords, GetCurrentPixelType());
+    for (int width = pos.x - radius; width < pos.x + radius; width++) {
+        for (int height = pos.y - radius; height < pos.y + radius; height++) {
+            coords.x = width;
+            coords.y = height;
+            CreatePixel(gamefield, coords, pixelType);
+        }
+    }
 }
 
 void ClearGamefield(Gamefield *gamefield) {

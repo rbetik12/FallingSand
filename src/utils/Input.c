@@ -6,6 +6,7 @@
 
 static PixelType currentPixelType = Sand;
 static bool isMouseButton1Pressed = false;
+static uint8_t pixelsRadius = 1;
 
 void OnMouseMove(GLFWwindow* window, double xPos, double yPos) {
     printf("Moved mouse X: %f Y: %f\n", xPos, yPos);
@@ -18,6 +19,10 @@ void OnMouseButtonEvent(GLFWwindow* window, int button, int action, int mods) {
     else if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
         isMouseButton1Pressed = false;
     }
+}
+
+uint8_t GetCurrentPixelsRadius() {
+    return pixelsRadius;
 }
 
 void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods) {
@@ -42,6 +47,12 @@ void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
     }
     else if (key == GLFW_KEY_F && action == GLFW_PRESS) {
         currentPixelType = Fire;
+    }
+    else if (key == GLFW_KEY_KP_ADD && action == GLFW_PRESS) {
+        pixelsRadius += 1;
+    }
+    else if (key == GLFW_KEY_KP_SUBTRACT && action == GLFW_PRESS) {
+        pixelsRadius -= 1;
     }
 }
 
