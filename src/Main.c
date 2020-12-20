@@ -11,6 +11,7 @@
 #include "opengl/Shader.h"
 #include "game/Gamefield.h"
 #include "utils/Input.h"
+#include "utils/AudioManager.h"
 
 uint32_t vertexArrayId;
 uint32_t vertexBufferId;
@@ -18,8 +19,6 @@ uint32_t indexBufferId;
 uint32_t basicShaderId;
 Gamefield *gamefield;
 GLFWwindow* window;
-
-static AudioSource ambientAudio;
 
 float verticesSquare[4 * 4] = {
         -1.f, -1.f, 0.0f, 0.0f,
@@ -88,12 +87,7 @@ void InitGame() {
 }
 
 void InitSound() {
-    VxSndInit();
-    VxSndLoadSound("data/sound/ambient.mp3", &ambientAudio);
-    if (!ambientAudio.loaded) {
-        fprintf(stderr, "Can't load music!\n");
-        exit(EXIT_FAILURE);
-    }
+    AudioManagerInit();
 }
 
 int main(int argc, char** argv) {
@@ -144,7 +138,7 @@ int main(int argc, char** argv) {
 
     glfwSetWindowUserPointer(window, updateInfo);
 
-    VxSndPlaySound(&ambientAudio);
+    AudioManagerPlaySoundOnce(Ambient);
 
     while (!glfwWindowShouldClose(window)) {
         OnUpdate(updateInfo);

@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include "../utils/ImageLoader.h"
 #include "Simulation.h"
+#include "../utils/AudioManager.h"
 
 #define GAMEFIELD_SIZE WIDTH * HEIGHT
 
@@ -117,6 +118,24 @@ void OnGamefieldClick(Gamefield* gamefield, MousePos pos) {
             coords.y = height;
             CreatePixel(gamefield, coords, pixelType);
         }
+    }
+
+    switch (pixelType) {
+        case Sand:
+            AudioManagerPlaySoundOnce(SandSpawn);
+            break;
+        case Plant:
+            AudioManagerPlaySoundOnce(PlantSpawn);
+            break;
+        case Water:
+            AudioManagerPlaySoundOnce(WaterSpawn);
+            break;
+        case Stone:
+            AudioManagerPlaySoundOnce(StoneSpawn);
+            break;
+        case Fire:
+            AudioManagerPlaySoundOnce(FireSpawn);
+            break;
     }
 }
 
