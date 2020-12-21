@@ -17,6 +17,8 @@ void SwapFirePixel(Gamefield *gamefield, IntVec2* old, IntVec2* new);
 
 void SetRandomFirePixelColor(struct Pixel* pixel);
 
+void RandomizeFirePixelCoords(int * x, int * y);
+
 bool WithinBounds(Gamefield* gamefield, int x, int y) {
     return !(x < 0 || y < 0 || x >= gamefield->width || y >= gamefield->height);
 }
@@ -207,7 +209,7 @@ void SmokeStep(Gamefield* gamefield, IntVec2 coords) {
 
 void FireStep(Gamefield* gamefield, IntVec2 coords) {
     SetRandomFirePixelColor(&gamefield->pixels[coords.y * gamefield->width + coords.x]);
-    if (gamefield->simulationStep % 10 != 0)  {
+    if (gamefield->simulationStep % 3 != 0)  {
         return;
     }
     struct IntVec2 new;
@@ -263,7 +265,6 @@ bool IsFlameable(Gamefield* gamefield, int x, int y) {
 }
 
 void SwapFirePixel(Gamefield *gamefield, IntVec2* old, IntVec2* new) {
-    if (gamefield->simulationStep % 5 != 0) return;
     struct Pixel fire;
     struct Pixel smoke;
     struct Pixel empty;
@@ -277,6 +278,23 @@ void SwapFirePixel(Gamefield *gamefield, IntVec2* old, IntVec2* new) {
 
     gamefield->pixels[old->y * gamefield->width + old->x] = smoke;
     gamefield->pixels[new->y * gamefield->width + new->x] = fire;
+
+    uint8_t flameRadius = 2;
+    for (int x = new->x - flameRadius; x < new->x + flameRadius; x++) {
+        for (int y = new->y - flameRadius; y < new->y + flameRadius; y++) {
+            int randX = x;
+            int randY = y;
+            RandomizeFirePixelCoords(&randX, &randY);
+            if (WithinBounds(gamefield, randX, randY) && IsFlameable(gamefield, randX, randY)) {
+                gamefield->pixels[randY * gamefield->width + randX] = fire;
+            }
+        }
+    }
+}
+
+void RandomizeFirePixelCoords(int * x, int * y) {
+    *x += rand() % 15 - 7;
+    *y += rand() % 16 - 9;
 }
 
 void SwapSandPixel(Gamefield* gamefield, IntVec2* old, IntVec2* new) {

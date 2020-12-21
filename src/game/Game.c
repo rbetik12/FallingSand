@@ -23,7 +23,7 @@ void OnUpdate(struct GLContext const* info) {
     bg.r = 0.10f, bg.g = 0.18f, bg.b = 0.24f, bg.a = 1.0f;
 
     nk_glfw3_new_frame();
-    int pixelType = Sand;
+    int pixelType;
     if (nk_begin(info->guiContext, "Pixel type", nk_rect(0, 0, 230, 150),
                  NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_TITLE)) {
 

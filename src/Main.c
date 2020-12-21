@@ -150,7 +150,6 @@ int main(int argc, char** argv) {
     struct GLContext* updateInfo = malloc(sizeof(struct GLContext));
     updateInfo->window = window;
     updateInfo->vertexArrayId = vertexArrayId;
-    updateInfo->vertexBufferId = vertexBufferId;
     updateInfo->indexBufferId = indexBufferId;
     updateInfo->basicShaderId = basicShaderId;
     updateInfo->gamefield = gamefield;
