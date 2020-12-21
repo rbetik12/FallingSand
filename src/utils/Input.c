@@ -1,15 +1,10 @@
 #include "Input.h"
-#include <stdio.h>
 #include <GLFW/glfw3.h>
 
 static PixelType currentPixelType = Sand;
 static bool isMouseButton1Pressed = false;
 static uint8_t pixelsRadius = 2;
 static bool isUiUsed = false;
-
-void OnMouseMove(GLFWwindow* window, double xPos, double yPos) {
-    printf("Moved mouse X: %f Y: %f\n", xPos, yPos);
-}
 
 void OnMouseButtonEvent(GLFWwindow* window, int button, int action, int mods) {
     if (isUiUsed) return;
@@ -23,6 +18,10 @@ void OnMouseButtonEvent(GLFWwindow* window, int button, int action, int mods) {
 
 uint8_t GetCurrentPixelsRadius() {
     return pixelsRadius;
+}
+
+void SetPixelsRadius(uint8_t r) {
+    pixelsRadius = r;
 }
 
 void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods) {

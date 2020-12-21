@@ -23,3 +23,4 @@ uint8_t GetCurrentPixelsRadius();
 bool IsUiUsed();
 void SetUiUse(bool isUsed);
 void SetCurrentPixelType(PixelType pixelType);
+void SetPixelsRadius(uint8_t radius);

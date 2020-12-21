@@ -24,8 +24,11 @@ void OnUpdate(struct GLContext const* info) {
 
     nk_glfw3_new_frame();
     int pixelType;
-    if (nk_begin(info->guiContext, "Pixel type", nk_rect(0, 0, 230, 150),
-                 NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_TITLE)) {
+    if (nk_begin(info->guiContext, "Controls", nk_rect(0, 0, 230, 250),
+                 NK_WINDOW_BORDER | NK_WINDOW_TITLE)) {
+
+        nk_layout_row_static(info->guiContext, 20, 100, 1);
+        nk_label(info->guiContext, "Pixel types:", NK_TEXT_ALIGN_LEFT);
 
         nk_layout_row_dynamic(info->guiContext, 30, 2);
         if (nk_option_label(info->guiContext, "Sand", pixelType == Sand)) pixelType = Sand;
@@ -36,9 +39,24 @@ void OnUpdate(struct GLContext const* info) {
         if (nk_option_label(info->guiContext, "Stone", pixelType == Stone)) pixelType = Stone;
         SetCurrentPixelType(pixelType);
 
-        nk_layout_row_static(info->guiContext, 20, 50, 1);
+        nk_layout_row_static(info->guiContext, 20, 50, 3);
         if (nk_button_label(info->guiContext, "Clear")) {
             ClearGamefield(info->gamefield);
+        }
+
+        nk_layout_row_static(info->guiContext, 20, 100, 1);
+        nk_label(info->guiContext, "Brush size:", NK_TEXT_ALIGN_LEFT);
+
+        nk_layout_row_static(info->guiContext, 20, 50, 2);
+        if (nk_button_label(info->guiContext, "-")) {
+            if (GetCurrentPixelsRadius() > 0) {
+                SetPixelsRadius(GetCurrentPixelsRadius() - 1);
+            }
+        }
+        if (nk_button_label(info->guiContext, "+")) {
+            if (GetCurrentPixelsRadius() < UINT8_MAX) {
+                SetPixelsRadius(GetCurrentPixelsRadius() + 1);
+            }
         }
     }
     nk_end(info->guiContext);
