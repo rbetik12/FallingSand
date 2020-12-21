@@ -160,7 +160,7 @@ int main(int argc, char** argv) {
     AudioManagerPlaySoundOnce(Ambient);
 
     struct nk_context* ctx;
-    ctx = nk_glfw3_init(window, NK_GLFW3_INSTALL_CALLBACKS, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
+    ctx = nk_glfw3_init(window, NK_GLFW3_DEFAULT, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
     updateInfo->guiContext = ctx;
 
     {

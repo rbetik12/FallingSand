@@ -20,3 +20,6 @@ void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
 bool IsMousePressed(int buttonCode);
 PixelType GetCurrentPixelType();
 uint8_t GetCurrentPixelsRadius();
+bool IsUiUsed();
+void SetUiUse(bool isUsed);
+void SetCurrentPixelType(PixelType pixelType);
