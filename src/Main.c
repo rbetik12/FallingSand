@@ -2,7 +2,23 @@
 #include <stdio.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 #include <vx-sound.h>
+
+#define NK_INCLUDE_FIXED_TYPES
+#define NK_INCLUDE_STANDARD_IO
+#define NK_INCLUDE_STANDARD_VARARGS
+#define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+#define NK_INCLUDE_FONT_BAKING
+#define NK_INCLUDE_DEFAULT_FONT
+#define NK_KEYSTATE_BASED_INPUT
+#define NK_IMPLEMENTATION
+#define NK_GLFW_GL4_IMPLEMENTATION
+
+#include <Nuklear/nuklear.h>
+#include <Nuklear/nuklear_glfw_gl4.h>
+
 #include "utils/Config.h"
 #include "game/Game.h"
 #include "opengl/VertexArray.h"
@@ -13,11 +29,14 @@
 #include "utils/Input.h"
 #include "utils/AudioManager.h"
 
+#define MAX_VERTEX_BUFFER 512 * 1024
+#define MAX_ELEMENT_BUFFER 128 * 1024
+
 uint32_t vertexArrayId;
 uint32_t vertexBufferId;
 uint32_t indexBufferId;
 uint32_t basicShaderId;
-Gamefield *gamefield;
+Gamefield* gamefield;
 GLFWwindow* window;
 
 float verticesSquare[4 * 4] = {
@@ -139,6 +158,17 @@ int main(int argc, char** argv) {
     glfwSetWindowUserPointer(window, updateInfo);
 
     AudioManagerPlaySoundOnce(Ambient);
+
+    struct nk_context* ctx;
+    ctx = nk_glfw3_init(window, NK_GLFW3_INSTALL_CALLBACKS, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
+    updateInfo->guiContext = ctx;
+
+    {
+        struct nk_font_atlas* atlas;
+        nk_glfw3_font_stash_begin(&atlas);
+        nk_glfw3_font_stash_end();
+    }
+
 
     while (!glfwWindowShouldClose(window)) {
         OnUpdate(updateInfo);

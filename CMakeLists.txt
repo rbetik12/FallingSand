@@ -14,14 +14,16 @@ set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE}-${PLATFORM}/${CMAKE_PROJECT_N
 add_subdirectory(lib/glad)
 add_subdirectory(lib/glfw)
 add_subdirectory(lib/vx-sound)
+add_subdirectory(lib/Nuklear)
 
 include_directories(lib/glad/include)
 include_directories(lib/vx-sound/include)
 include_directories(lib)
+include_directories(lib/Nuklear)
 add_executable(falling_sand src/Main.c src/utils/Config.h src/game/Game.h src/game/Game.c src/opengl/VertexArray.h src/opengl/VertexArray.c src/opengl/Buffer.h src/opengl/Buffer.c src/utils/Debug.h src/utils/Debug.c src/opengl/Shader.h src/opengl/Shader.c src/game/Gamefield.h src/game/Gamefield.c src/game/Color32.h src/game/Pixel.h src/game/PixelType.h lib/stb/stb_image.h src/utils/ImageLoader.h src/utils/ImageLoader.c src/utils/Input.h src/utils/Input.c src/game/Simulation.h src/game/Simulation.c src/utils/AudioManager.c src/utils/AudioManager.h)
 
+target_link_libraries(falling_sand nuklear glad vortex_sound glfw )
 if (UNIX)
-    target_link_libraries(falling_sand glad vortex_sound GL GLU glfw dl X11 Xxf86vm Xrandr pthread Xi Xinerama Xcursor)
+    target_link_libraries(falling_sand GL GLU dl X11 Xxf86vm Xrandr pthread Xi Xinerama Xcursor)
 elseif (WIN32)
-    target_link_libraries(falling_sand glad glfw vortex_sound)
 endif()
