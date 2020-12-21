@@ -23,7 +23,7 @@ void OnUpdate(struct GLContext const* info) {
     bg.r = 0.10f, bg.g = 0.18f, bg.b = 0.24f, bg.a = 1.0f;
 
     nk_glfw3_new_frame();
-    int pixelType;
+    int pixelType = Sand;
     if (nk_begin(info->guiContext, "Pixel type", nk_rect(0, 0, 230, 150),
                  NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_TITLE)) {
 
@@ -35,6 +35,11 @@ void OnUpdate(struct GLContext const* info) {
         if (nk_option_label(info->guiContext, "Plant", pixelType == Plant)) pixelType = Plant;
         if (nk_option_label(info->guiContext, "Stone", pixelType == Stone)) pixelType = Stone;
         SetCurrentPixelType(pixelType);
+
+        nk_layout_row_static(info->guiContext, 20, 50, 1);
+        if (nk_button_label(info->guiContext, "Clear")) {
+            ClearGamefield(info->gamefield);
+        }
     }
     nk_end(info->guiContext);
 

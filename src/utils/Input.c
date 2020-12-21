@@ -50,13 +50,12 @@ void OnKeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
     else if (key == GLFW_KEY_F && action == GLFW_PRESS) {
         currentPixelType = Fire;
     }
-    else if (key == GLFW_KEY_KP_ADD && action == GLFW_PRESS) {
+    else if (key == GLFW_KEY_EQUAL && action == GLFW_PRESS) {
         pixelsRadius += 1;
     }
-    else if (key == GLFW_KEY_KP_SUBTRACT && action == GLFW_PRESS) {
+    else if (key == GLFW_KEY_MINUS && action == GLFW_PRESS) {
         pixelsRadius -= 1;
     }
-    printf("Button\n");
 }
 
 bool IsMousePressed(int buttonCode) {
