@@ -16,8 +16,10 @@ struct timespec finish;
 double elapsed;
 
 void AudioManagerInit() {
+#ifdef UNIX
     clock_gettime(CLOCK_MONOTONIC, &start);
     clock_gettime(CLOCK_MONOTONIC, &finish);
+#endif
     VxSndInit();
     VxSndLoadSound("data/sound/ambient.mp3", &ambientAudio);
     VxSndLoadSound("data/sound/sand_spawn.mp3", &sandSpawnAudio);
@@ -31,11 +33,13 @@ void AudioManagerInit() {
 }
 
 void AudioManagerPlaySoundOnce(SoundType soundType) {
+#ifdef UNIX
     clock_gettime(CLOCK_MONOTONIC, &start);
     elapsed = (finish.tv_sec - start.tv_sec);
     elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
     finish = start;
     if (-elapsed < 0.2f) return;
+#endif
     switch (soundType) {
         case Ambient:
             VxSndPlaySound(&ambientAudio);

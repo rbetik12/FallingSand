@@ -11,8 +11,8 @@
 #define NK_INCLUDE_DEFAULT_FONT
 #define NK_KEYSTATE_BASED_INPUT
 #include <stdio.h>
-#include <Nuklear/nuklear.h>
 #include <Nuklear/nuklear_glfw_gl4.h>
+#include <Nuklear/nuklear.h>
 #include "../opengl/Shader.h"
 #include "../opengl/VertexArray.h"
 
@@ -23,7 +23,7 @@ void OnUpdate(struct GLContext const* info) {
     bg.r = 0.10f, bg.g = 0.18f, bg.b = 0.24f, bg.a = 1.0f;
 
     nk_glfw3_new_frame();
-    int pixelType;
+    static int pixelType;
     if (nk_begin(info->guiContext, "Controls", nk_rect(0, 0, 230, 250),
                  NK_WINDOW_BORDER | NK_WINDOW_TITLE)) {
 
