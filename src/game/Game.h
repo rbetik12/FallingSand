@@ -9,6 +9,7 @@ struct GLContext {
     GLFWwindow* window;
     Gamefield* gamefield;
     struct nk_context* guiContext;
+    struct nk_glfw* glfw;
 };
 
 void OnUpdate(struct GLContext const* info);

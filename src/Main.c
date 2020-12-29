@@ -3,8 +3,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <vx-sound.h>
-
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
 #define NK_INCLUDE_STANDARD_VARARGS
@@ -12,12 +10,12 @@
 #define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
 #define NK_INCLUDE_FONT_BAKING
 #define NK_INCLUDE_DEFAULT_FONT
-#define NK_KEYSTATE_BASED_INPUT
 #define NK_IMPLEMENTATION
-#define NK_GLFW_GL4_IMPLEMENTATION
+#define NK_GLFW_GL3_IMPLEMENTATION
+#define NK_KEYSTATE_BASED_INPUT
 
 #include <Nuklear/nuklear.h>
-#include <Nuklear/nuklear_glfw_gl4.h>
+#include <Nuklear/nuklear_glfw_gl3.h>
 
 #include "utils/Config.h"
 #include "game/Game.h"
@@ -29,9 +27,6 @@
 #include "utils/Input.h"
 #include "utils/AudioManager.h"
 
-#define MAX_VERTEX_BUFFER 512 * 1024
-#define MAX_ELEMENT_BUFFER 128 * 1024
-
 uint32_t vertexArrayId;
 uint32_t vertexBufferId;
 uint32_t indexBufferId;
@@ -39,7 +34,7 @@ uint32_t basicShaderId;
 Gamefield* gamefield;
 GLFWwindow* window;
 
-float verticesSquare[4 * 4] = {
+float verticesSquare[5 * 4] = {
         -1.f, -1.f, 0.0f, 0.0f,
         1.f, -1.f, 1.0f, 0.0f,
         1.f, 1.f, 1.0f, 1.0f,
@@ -66,6 +61,7 @@ void InitBuffers() {
 }
 
 void InitShaders() {
+    glEnable(GL_DEPTH_TEST);
     const char* basicVertexShader = ""
                                     "#version 330 core"
                                     "\n"
@@ -75,7 +71,7 @@ void InitShaders() {
                                     "out vec2 v_TexCoord;"
                                     ""
                                     "void main() {"
-                                    "   gl_Position = vec4(position, 1.0);"
+                                    "   gl_Position = vec4(position.xy, -1, 1.0);"
                                     "   v_TexCoord = texCoord;"
                                     "}";
 
@@ -143,7 +139,7 @@ int main(int argc, char** argv) {
     InitSound();
     InitBuffers();
     InitShaders();
-    InitDebug();
+//    InitDebug();
     InitGame();
     InitEventHandlers();
 
@@ -154,25 +150,27 @@ int main(int argc, char** argv) {
     updateInfo->basicShaderId = basicShaderId;
     updateInfo->gamefield = gamefield;
 
-    glfwSetWindowUserPointer(window, updateInfo);
-
     AudioManagerPlaySoundOnce(Ambient);
 
     struct nk_context* ctx;
-    ctx = nk_glfw3_init(window, NK_GLFW3_DEFAULT, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
+    struct nk_glfw glfw = {0};
+    ctx = nk_glfw3_init(&glfw, window, NK_GLFW3_DEFAULT);
     updateInfo->guiContext = ctx;
+    updateInfo->glfw = &glfw;
 
     {
         struct nk_font_atlas* atlas;
-        nk_glfw3_font_stash_begin(&atlas);
-        nk_glfw3_font_stash_end();
+        nk_glfw3_font_stash_begin(&glfw, &atlas);
+        nk_glfw3_font_stash_end(&glfw);
     }
 
+    glfwSetWindowUserPointer(window, updateInfo);
 
     while (!glfwWindowShouldClose(window)) {
         OnUpdate(updateInfo);
     }
 
+    nk_glfw3_shutdown(&glfw);
     free(updateInfo);
     glfwTerminate();
     return 0;

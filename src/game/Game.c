@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
 #define NK_INCLUDE_STANDARD_VARARGS
@@ -10,21 +11,41 @@
 #define NK_INCLUDE_FONT_BAKING
 #define NK_INCLUDE_DEFAULT_FONT
 #define NK_KEYSTATE_BASED_INPUT
-#include <stdio.h>
-#include <Nuklear/nuklear_glfw_gl4.h>
+
 #include <Nuklear/nuklear.h>
+#include <Nuklear/nuklear_glfw_gl3.h>
+#include <stdio.h>
 #include "../opengl/Shader.h"
 #include "../opengl/VertexArray.h"
 
+#define MAX_VERTEX_BUFFER 512 * 1024 * 4
+#define MAX_ELEMENT_BUFFER 128 * 1024 * 4
+
 void OnUpdate(struct GLContext const* info) {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0, 0, 0, 1);
     struct nk_colorf bg;
     bg.r = 0.10f, bg.g = 0.18f, bg.b = 0.24f, bg.a = 1.0f;
 
-    nk_glfw3_new_frame();
+    BindShader(&info->basicShaderId);
+    bool isLeftButtonPressed = IsMousePressed(GLFW_MOUSE_BUTTON_1);
+    if (isLeftButtonPressed) {
+        MousePos pos;
+        struct GLContext* context;
+        glfwGetCursorPos(info->window, &pos.x, &pos.y);
+        context = glfwGetWindowUserPointer(info->window);
+        OnGamefieldClick(context->gamefield, pos);
+    }
+    BindGamefield(0, info->gamefield);
+    OnUpdateGamefield(info->gamefield);
+    BindVertexArray(&info->vertexArrayId);
+
+    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, NULL);
+    UnBindGamefield(info->gamefield);
+
+    nk_glfw3_new_frame(info->glfw);
     static int pixelType;
-    if (nk_begin(info->guiContext, "Controls", nk_rect(0, 0, 230, 250),
+    if (nk_begin(info->guiContext, "Controls", nk_rect(0, 0, 250, 250),
                  NK_WINDOW_BORDER | NK_WINDOW_TITLE)) {
 
         nk_layout_row_static(info->guiContext, 20, 100, 1);
@@ -59,28 +80,15 @@ void OnUpdate(struct GLContext const* info) {
             }
         }
     }
+
     nk_end(info->guiContext);
-
-    BindShader(&info->basicShaderId);
-    bool isLeftButtonPressed = IsMousePressed(GLFW_MOUSE_BUTTON_1);
-    if (isLeftButtonPressed) {
-        MousePos pos;
-        struct GLContext* context;
-        glfwGetCursorPos(info->window, &pos.x, &pos.y);
-        context = glfwGetWindowUserPointer(info->window);
-        OnGamefieldClick(context->gamefield, pos);
-    }
-    OnUpdateGamefield(info->gamefield);
-    BindVertexArray(&info->vertexArrayId);
-
-    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, NULL);
 
     int width, height;
     glfwGetWindowSize(info->window, &width, &height);
     glViewport(0, 0, width, height);
     SetUiUse(nk_item_is_any_active(info->guiContext));
     glfwPollEvents();
-    nk_glfw3_render(NK_ANTI_ALIASING_ON);
+    nk_glfw3_render(info->glfw, NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
     glfwSwapBuffers(info->window);
 }
 

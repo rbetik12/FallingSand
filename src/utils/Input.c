@@ -1,5 +1,6 @@
 #include "Input.h"
 #include <GLFW/glfw3.h>
+#include <stdio.h>
 
 static PixelType currentPixelType = Sand;
 static bool isMouseButton1Pressed = false;
